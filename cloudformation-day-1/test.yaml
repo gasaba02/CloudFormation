@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "EC2 instance automation for developement environment"
+Metadata: {}
+
+Parameters: {}
+
+Mappings: {}
+
+Conditions: {}
+
+Resources: 
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: germ_key_VA
+      ImageId: ami-03eb6185d756497f8
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref secGroupName
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        echo "Hello from the EC2 instance!" > /var/www/html/index.html
+        service apache2 start
+      Tags:
+        - Key: Env
+          Value: Dev
+
+  secGroupName:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: cfn_sg
+      GroupDescription: Allow ssh and http traffic
+      VpcId: vpc-0476caa1c53317c42
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+      Tags:
+        - Key: Env
+          Value: Dev
