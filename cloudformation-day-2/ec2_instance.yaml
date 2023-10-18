@@ -35,4 +35,43 @@ Resources:
         - Key: Name
           Value: devWebServer
 
+  devVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: false
+      Tags:
+        - Key: Name
+          Value: devVPC
+
+  devPublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1b
+      VpcId: !Ref devVPC
+      CidrBlock: 10.0.0.0/24
+      Tags:
+        - Key: Name
+          Value: devPublicSubnet1
+
+  devPublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1a
+      VpcId: !Ref devVPC
+      CidrBlock: 10.0.0.1/24
+      Tags:
+        - Key: Name
+          Value: devPublicSubnet2
+
+  devPrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1b
+      VpcId: !Ref devVPC
+      CidrBlock: 10.0.1.0/24
+      Tags:
+        - Key: Name
+          Value: devPrivateSubnet
+
 Outputs: {}
