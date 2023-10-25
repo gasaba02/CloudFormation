@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: "VPC and Subnets automation for developement environment"
+Description: This template is used to provision our dev network environment
 Metadata: {}
 
 Parameters: {}
@@ -9,46 +9,47 @@ Mappings: {}
 Conditions: {}
 
 Resources: 
+  # Development vpc
   devVPC:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/16
-      EnableDnsSupport: false
+      EnableDnsSupport: true
       Tags:
         - Key: Name
-          Value: devVPC
+          Value: devVPV
 
-  webPublicSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: us-east-1b
-      VpcId: 
-        !Ref devVPC
-      CidrBlock: 10.0.1.0/24
-      Tags:
-        - Key: Name
-          Value: devPublicSubnet1
-
-  appPublicSubnet2:
+  # webserver subnet
+  devWebserverSubnet:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: us-east-1a
-      VpcId: 
-        !Ref devVPC
+      VpcId: !Ref devVPC
+      CidrBlock: 10.0.1.0/24
+      Tags:
+        - Key: Name
+          Value: devWebserverSubnet
+
+  # appserver subnet
+  devAppserverSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1a
+      VpcId: !Ref devVPC
       CidrBlock: 10.0.2.0/24
       Tags:
         - Key: Name
-          Value: devPublicSubnet2
+          Value: devAppserverSubnet
 
-  dbPrivateSubnet:
+  # dbserver subnet
+  devDbserverSubnet:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: us-east-1b
-      VpcId: 
-        !Ref devVPC
+      AvailabilityZone: us-east-1a
+      VpcId: !Ref devVPC
       CidrBlock: 10.0.3.0/24
       Tags:
         - Key: Name
-          Value: devPrivateSubnet
+          Value: devDbserverSubnet
 
-
+Outputs: {}

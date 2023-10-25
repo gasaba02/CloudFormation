@@ -1,13 +1,13 @@
-AWSTemplateFormatVersion: 2010-09-09
-Description: ---
-Metadata: 
+# AWSTemplateFormatVersion: 2010-09-09
+# Description: ---
+# Metadata: 
 
-Parameters: 
+# Parameters: 
 
-Mappings: 
+# Mappings: 
 
-Conditions: 
+# Conditions: 
 
-Resources: 
+# Resources: 
 
-Outputs:
+# Outputs:
