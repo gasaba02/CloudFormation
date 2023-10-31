@@ -1,0 +1,34 @@
+[
+    {
+        "ParameterKey": "devVpcCidarBlockPara",
+        "ParameterValue": "10.0.0.0/16"
+    },
+    {
+        "ParameterKey": "devVpcEnableDnsSupportPara",
+        "ParameterValue": "true"
+    },
+    {
+        "ParameterKey": "devWebserverSubnetAzPara",
+        "ParameterValue": "us-east-1a"
+    },
+    {
+        "ParameterKey": "devWebServerSubnetCidarPara",
+        "ParameterValue": "10.0.1.0/24"
+    },
+    {
+        "ParameterKey": "devAppserverSubnetAZPara",
+        "ParameterValue": "us-east-1a"
+    },
+    {
+        "ParameterKey": "devAppServerSubnetCidarPara",
+        "ParameterValue": "10.0.2.0/24"
+    },
+    {
+        "ParameterKey": "devDBserverSubnetAZPara",
+        "ParameterValue": "us-east-1a"
+    },
+    {
+        "ParameterKey": "devDBServerSubnetCidarPara",
+        "ParameterValue": "10.0.3.0/24"
+    }
+]
