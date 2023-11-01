@@ -2,3 +2,5 @@ aws cloudformation create-stack --stack-name dev-network-infra-pf --template-bod
 
 aws cloudformation delete-stack \
     --stack-name dev-network-infra-pf
+
+aws cloudformation update-stack --stack-name dev-security-group --template-body file://security-groups.yaml

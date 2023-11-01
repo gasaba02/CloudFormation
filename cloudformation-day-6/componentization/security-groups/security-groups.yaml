@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This templates provisions the webserver and database security groups
+Metadata: {}
+
+Parameters: 
+  devWebserverSgGroupName:
+    Description: Please provide your dev webserver security group name
+    Type: String
+    Default: devWebserverSgGroupName
+
+  devWebserverSgGroupDescription:
+    Description: Please provide your dev webserver security group description
+    Type: String
+    Default: Enabling ssh and HTTP
+
+  devDbSgGroupName:
+    Description: Please provide your dev database security group name
+    Type: String
+    Default: devDbSgGroupName
+
+  devDbSgGroupDescription:
+    Description: Please provide your dev database security group description
+    Type: String
+    Default: Enabling MySQL
+
+Mappings: {}
+
+Conditions: {}
+
+Resources: 
+  # Webserver Security group
+  devWebserverSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Ref devWebserverSgGroupName
+      GroupDescription: !Ref devWebserverSgGroupDescription
+      VpcId: !ImportValue devVPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: devWebserverSg
+  
+  # Database Security group
+  devDatabaseSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Ref devDbSgGroupName
+      GroupDescription: !Ref devDbSgGroupDescription
+      VpcId: !ImportValue devVPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: devDbSg
+
+Outputs:
+  devWebserverSgIDExportOutput:
+    Description: Exporting dev webserver SG ID
+    Value: !Ref devWebserverSg
+    Export: 
+      Name: devWebserverSgID
+
+  devDatabaseSgIDExportOutput:
+    Description: Exporting dev database SG ID
+    Value: !Ref devDatabaseSg
+    Export: 
+      Name: devDatabaseSgID
