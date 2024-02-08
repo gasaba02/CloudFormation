@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "EC2 instance automation for developement environment"
+Metadata: {}
+
+Parameters: 
+  deveWebseverKeyname:
+    Description: Please select your keypair
+    Type: AWS::EC2::KeyPair::KeyName
+
+  environmentName:
+    Description: Please select your environment
+    Type: String
+    # Use this to specify values for conditions
+    AllowedValues:
+         - Dev
+         - Stage
+         - Prod
+    
+Mappings: 
+  # Map name
+  devWebserverGoldenAmiMap:
+    # Parameter name
+    us-east-1:
+    # Map/Parameter key
+      goldenAMI: ami-0fc5d935ebf8bc3bc
+    us-east-2:
+      goldenAMI: ami-0e83be366243f524a
+    us-west-1:
+      goldenAMI: ami-0cbd40f694b804622
+    us-west-2:
+      goldenAMI: ami-0efcece6bed30fd98
+
+# Codition definition
+Conditions: 
+  createDevStageProdResources:
+    !Equals [!Ref environmentName, Prod]
+
+Resources: 
+  devWebServer1:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref deveWebseverKeyname
+      ImageId: !FindInMap [ devWebserverGoldenAmiMap, !Ref 'AWS::Region', goldenAMI ]
+      InstanceType: t2.micro
+      Monitoring: true
+      UserData: !Base64 |
+        #!/bin/bash 
+        sudo su
+        apt update -y
+        apt -y install apache2
+        systemctl start apache2
+        systemctl enable apache2
+        apt install wget -y
+        wget https://github.com/awanmbandi/google-cloud-projects/raw/jjtech-flix-app/jjtech-streaming-application-v1.zip 
+        apt install unzip -y
+        unzip jjtech-streaming-application-v1.zip
+        rm -f /var/www/html/index.html
+        cp -rf jjtech-streaming-application-v1/* /var/www/html/
+      Tags:
+        - Key: Name
+          Value: devWebServer1
+
+  devWebServer2:
+    Type: AWS::EC2::Instance
+    Condition: createDevStageProdResources
+    Properties:
+      KeyName: !Ref deveWebseverKeyname
+      ImageId: !FindInMap [ devWebserverGoldenAmiMap, !Ref 'AWS::Region', goldenAMI ]
+      InstanceType: t2.micro
+      Monitoring: true
+      UserData: !Base64 |
+        #!/bin/bash 
+        sudo su
+        apt update -y
+        apt -y install apache2
+        systemctl start apache2
+        systemctl enable apache2
+        apt install wget -y
+        wget https://github.com/awanmbandi/google-cloud-projects/raw/jjtech-flix-app/jjtech-streaming-application-v1.zip 
+        apt install unzip -y
+        unzip jjtech-streaming-application-v1.zip
+        rm -f /var/www/html/index.html
+        cp -rf jjtech-streaming-application-v1/* /var/www/html/
+      Tags:
+        - Key: Name
+          Value: devWebServer2
+
+  devWebServer3:
+    Type: AWS::EC2::Instance
+    Condition: createDevStageProdResources
+    Properties:
+      KeyName: !Ref deveWebseverKeyname
+      ImageId: !FindInMap [ devWebserverGoldenAmiMap, !Ref 'AWS::Region', goldenAMI ]
+      InstanceType: t2.micro
+      Monitoring: true
+      UserData: !Base64 |
+        #!/bin/bash 
+        sudo su
+        apt update -y
+        apt -y install apache2
+        systemctl start apache2
+        systemctl enable apache2
+        apt install wget -y
+        wget https://github.com/awanmbandi/google-cloud-projects/raw/jjtech-flix-app/jjtech-streaming-application-v1.zip 
+        apt install unzip -y
+        unzip jjtech-streaming-application-v1.zip
+        rm -f /var/www/html/index.html
+        cp -rf jjtech-streaming-application-v1/* /var/www/html/
+      Tags:
+        - Key: Name
+          Value: devWebServer3
+
+
+
+  # devVPC:
+  #   Type: AWS::EC2::VPC
+  #   Properties:
+  #     CidrBlock: 10.0.0.0/16
+  #     EnableDnsSupport: false
+  #     Tags:
+  #       - Key: Name
+  #         Value: devVPC
+
+  # devPublicSubnet1:
+  #   Type: AWS::EC2::Subnet
+  #   Properties:
+  #     AvailabilityZone: us-east-1b
+  #     VpcId: !Ref devVPC
+  #     CidrBlock: 10.0.0.0/24
+  #     Tags:
+  #       - Key: Name
+  #         Value: devPublicSubnet1
+
+  # devPublicSubnet2:
+  #   Type: AWS::EC2::Subnet
+  #   Properties:
+  #     AvailabilityZone: us-east-1a
+  #     VpcId: !Ref devVPC
+  #     CidrBlock: 10.0.0.1/24
+  #     Tags:
+  #       - Key: Name
+  #         Value: devPublicSubnet2
+
+  # devPrivateSubnet:
+  #   Type: AWS::EC2::Subnet
+  #   Properties:
+  #     AvailabilityZone: us-east-1b
+  #     VpcId: !Ref devVPC
+  #     CidrBlock: 10.0.1.0/24
+  #     Tags:
+  #       - Key: Name
+  #         Value: devPrivateSubnet
+
+Outputs: {}
